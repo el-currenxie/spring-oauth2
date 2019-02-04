@@ -1,0 +1,6 @@
+server:
+  port: 8081
+
+feign:
+  name: "abc"
+  url: "localhost:8907"

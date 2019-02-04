@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+         <title> Home page </title>
+</head>
+<body>
+<h1> Home Page </h1>
+
+<div sec:authorize="hasRole('USER')">Text visible to account.</div>
+<div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
+
+
+<p> Click <a th:href="@{/public}"> here </a> to see a public page. </p>
+<p> If you are a normal account press <a th:href="@{/private}"> here </a> to see a private page </p>
+<p> If you are a normal administrator press <a th:href="@{/admin}"> here </a> to see the administrator page </p>
+<div sec:authorize="isAuthenticated()">
+     Hello <span sec:authentication="name"> someone </span>
+     <p> <a th:href="@{/logout}"> Disconnect </a> </p>
+</div>
+</body>
+</html>
