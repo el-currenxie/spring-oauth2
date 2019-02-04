@@ -1,7 +1,17 @@
-security:
-  oauth2:
-    client:
-      client-id: cliente
-      client-secret: password
-      scope: read,write
-      auto-approve-scopes: '.*'
+logging.level:
+  # Enable request logging
+  org.springframework.web.filter: DEBUG
+  # Web security access control logging
+  org.springframework.security.web.access: DEBUG
+  # Enable logging of access token request
+  org.springframework.web.client: DEBUG
+  # Enable request logging
+  example.client.HelloClient: DEBUG
+
+  #security:
+#  oauth2:
+#    client:
+#      client-id: cliente
+#      client-secret: password
+#      scope: read,write
+#      auto-approve-scopes: '.*'

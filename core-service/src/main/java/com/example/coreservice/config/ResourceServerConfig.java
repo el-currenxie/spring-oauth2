@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -15,6 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -41,36 +45,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return defaultTokenServices;
     }
 
+//    @Override
+//    protected MethodSecurityExpressionHandler createExpressionHandler() {
+//        return new OAuth2MethodSecurityExpressionHandler();
+//    }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/oauth/token", "/oauth/authorize**", "/public").permitAll();
-//			 .anyRequest().authenticated();
-
-//        http.requestMatchers()
-//                .antMatchers("/private")
-//                .and()
-//                .authorizeRequests().antMatchers("/private").access("hasRole('USER')")
-//                .and()
-//                .requestMatchers().antMatchers("/admin")
-//                .and()
-//                .authorizeRequests().antMatchers("/admin").access("hasRole('ADMIN')");
 
         http.authorizeRequests()
-                .antMatchers("/","/index","/public").permitAll()
-                .antMatchers("/private").authenticated()
-                .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/api/accounts/**").hasRole("ADMIN")
-                .antMatchers("/api/*").authenticated()
-                .and()
-                .formLogin().loginPage("/login").permitAll()
-                .and()
-                .logout().permitAll();
+                .antMatchers("/api/*").authenticated();
 
-//        http.authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin().and()
-//                .httpBasic();
+
     }
 
 }
