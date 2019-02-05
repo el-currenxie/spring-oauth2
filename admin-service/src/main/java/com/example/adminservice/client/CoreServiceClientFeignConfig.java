@@ -9,14 +9,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 
 import java.util.Arrays;
 
 @Configuration
 public class CoreServiceClientFeignConfig {
-    @Autowired
-    private OAuth2ProtectedResourceDetails resource;
+//    @Autowired
+//    private OAuth2ProtectedResourceDetails resource;
 
     @Value("${security.oauth2.client.access-token-uri}")
     private String accessTokenUri;
@@ -37,22 +38,24 @@ public class CoreServiceClientFeignConfig {
         return Logger.Level.FULL;
     }
 
-    @Bean
-    @ConfigurationProperties(prefix = "security.oauth2.client")
-    public ClientCredentialsResourceDetails clientCredentialsResourceDetails() {
-        return new ClientCredentialsResourceDetails();
-    }
+//    @Bean
+//    @ConfigurationProperties(prefix = "security.oauth2.client")
+//    public ClientCredentialsResourceDetails clientCredentialsResourceDetails() {
+//        return new ClientCredentialsResourceDetails();
+//    }
 
-//    private OAuth2ProtectedResourceDetails resource() {
-//        ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
+    private OAuth2ProtectedResourceDetails resource() {
+        ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
 //        resourceDetails.setUsername("user");
 //        resourceDetails.setPassword("user");
-//        resourceDetails.setAccessTokenUri(accessTokenUri);
-//        resourceDetails.setClientId(clientId);
-//        resourceDetails.setClientSecret(clientSecret);
-//        resourceDetails.setGrantType("password");
-//        resourceDetails.setScope(Arrays.asList(scope));
-//        return resourceDetails;
-//    }
+        resourceDetails.setAccessTokenUri(accessTokenUri);
+        resourceDetails.setClientId(clientId);
+        resourceDetails.setClientSecret(clientSecret);
+        resourceDetails.setGrantType("client_credentials");
+        resourceDetails.setScope(Arrays.asList(scope));
+        System.out.println("----------------------------------");
+        System.out.println(resourceDetails);
+        return resourceDetails;
+    }
 
 }

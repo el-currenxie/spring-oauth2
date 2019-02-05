@@ -1,12 +1,11 @@
 logging.level:
-  # Enable request logging
+#  root: DEBUG
   org.springframework.web.filter: DEBUG
-  # Web security access control logging
   org.springframework.security.web.access: DEBUG
-  # Enable logging of access token request
   org.springframework.web.client: DEBUG
-  # Enable request logging
   example.client.HelloClient: DEBUG
+  org.apache.http: DEBUG
+
 
   #security:
 #  oauth2:

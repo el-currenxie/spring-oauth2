@@ -1,15 +1,19 @@
 logging.level:
-  # Enable request logging
+#  root: DEBUG
   org.springframework.web.filter: DEBUG
-  # Web security access control logging
   org.springframework.security.web.access: DEBUG
-  # Enable logging of access token request
   org.springframework.web.client: DEBUG
-  # Enable request logging
   example.client.HelloClient: DEBUG
+  org.apache.http: DEBUG
+
+spring:
+  application:
+    name: admin-service
 
 server:
   port: 8081
+
+
 feign:
   client:
     config:
@@ -23,11 +27,13 @@ core-service:
 
 security:
   oauth2:
+    baseUrl: http://localhost:8080
     client:
       access-token-uri: http://localhost:8080/oauth/token
-      client-id: admin
-      client-secret: admin
-      scope: read write admin
+      client-id: 123
+      client-secret: 123
+      scope: admin
+#      grant-type: client_credentials
     resource:
       id: service
       tokenInfoUri: http://localhost:8080/oauth/check_token

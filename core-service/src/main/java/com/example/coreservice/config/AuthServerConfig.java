@@ -24,9 +24,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
-
-    @Autowired
     private TokenStore tokenStore;
 
     @Autowired
@@ -36,34 +33,17 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
         clients.inMemory()
-                    .withClient("client")
-                    .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-                    .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT", "USER")
-                    .scopes("read", "write")
-                    .autoApprove(true)
-                    .secret(passwordEncoder.encode("password"))
-                    .accessTokenValiditySeconds(1*60*60)
-                    .refreshTokenValiditySeconds(6*60*60)
-                .and()
-                    .withClient("app")
-                    .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-                    .scopes("read", "write", "app")
-                    .autoApprove(true)
-                    .secret(passwordEncoder.encode("app"))
-                    .scopes("app")
-                .and()
-                    .withClient("admin")
-                    .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit", "client_credentials")
-                    .secret(passwordEncoder.encode("admin"))
-                    .scopes("read", "write", "admin")
-                    .autoApprove(true);
+                .withClient("123")
+                .secret(passwordEncoder.encode("123"))
+                .authorizedGrantTypes("client_credentials")
+                .scopes("admin")
+                .autoApprove(true);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(tokenStore);
-//                .accessTokenConverter(jwtAccessTokenConverter);
     }
 
     @Bean
@@ -71,10 +51,10 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
-    }
+//    @Override
+//    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+//        oauthServer.tokenKeyAccess("permitAll()")
+//                .checkTokenAccess("isAuthenticated()");
+//    }
 
 }

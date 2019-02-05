@@ -21,44 +21,33 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Autowired
-    private TokenStore tokenStore;
-
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("account");
-        resources.tokenServices(tokenServices());
-    }
-
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("1234qwer");
-        return converter;
-    }
-
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore);
-        return defaultTokenServices;
-    }
-
+//    @Autowired
+//    private TokenStore tokenStore;
+//
 //    @Override
-//    protected MethodSecurityExpressionHandler createExpressionHandler() {
-//        return new OAuth2MethodSecurityExpressionHandler();
+//    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+//        resources.resourceId("account");
+//        resources.tokenServices(tokenServices());
+//    }
+//
+//
+//    @Bean
+//    @Primary
+//    public DefaultTokenServices tokenServices() {
+//        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+//        defaultTokenServices.setTokenStore(tokenStore);
+//        return defaultTokenServices;
 //    }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/oauth/token", "/oauth/authorize**", "/public").permitAll();
-
-        http.authorizeRequests()
-                .antMatchers("/api/accounts/**").hasRole("ADMIN")
-                .antMatchers("/api/*").authenticated();
-
-
-    }
+//    @Override
+//    public void configure(HttpSecurity http) throws Exception {
+////        http.authorizeRequests().antMatchers("/oauth/token", "/oauth/authorize**", "/public").permitAll();
+//
+//        http.authorizeRequests()
+//                .antMatchers("/api/accounts/**").hasRole("ADMIN")
+//                .antMatchers("/api/*").authenticated();
+//
+//
+//    }
 
 }
