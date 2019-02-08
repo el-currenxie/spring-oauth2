@@ -1,3 +1,5 @@
+debug: true
+
 logging.level:
 #  root: DEBUG
   org.springframework.web.filter: DEBUG
@@ -6,11 +8,13 @@ logging.level:
   example.client.HelloClient: DEBUG
   org.apache.http: DEBUG
 
-
-  #security:
-#  oauth2:
-#    client:
-#      client-id: cliente
-#      client-secret: password
-#      scope: read,write
-#      auto-approve-scopes: '.*'
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
