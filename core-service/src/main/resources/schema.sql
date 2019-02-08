@@ -1,3 +1,4 @@
+CREATE EXTENSION if NOT exists pgcrypto;
 drop table if exists oauth_client_details;
 create table oauth_client_details (
   client_id VARCHAR(255) PRIMARY KEY,

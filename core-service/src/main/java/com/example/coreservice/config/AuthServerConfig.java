@@ -38,15 +38,14 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Value("${spring.datasource.driver-class-name}")
     private String datasourceDriver;
 
-
-    @Autowired
-    @Qualifier("authenticationManagerBean")
-    private AuthenticationManager authenticationManager;
-
     @Value("classpath:schema.sql")
     private Resource schemaScript;
     @Value("classpath:data.sql")
     private Resource dataScript;
+
+    @Autowired
+    @Qualifier("authenticationManagerBean")
+    private AuthenticationManager authenticationManager;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
