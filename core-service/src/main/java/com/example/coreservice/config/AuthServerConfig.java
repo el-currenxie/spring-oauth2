@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -44,37 +45,23 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Value("classpath:schema.sql")
     private Resource schemaScript;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Value("classpath:data.sql")
+    private Resource dataScript;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-        clients.inMemory()
-                .withClient("123")
-                .secret(passwordEncoder.encode("123"))
-                .authorizedGrantTypes("client_credentials")
-                .scopes("admin")
-                .autoApprove(true);
+        clients.jdbc(dataSource());
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager)
-                .tokenStore(tokenStore());
+        endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore());
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
-
-//    @Override
-//    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-//        oauthServer.tokenKeyAccess("permitAll()")
-//                .checkTokenAccess("isAuthenticated()");
-//    }
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
@@ -87,6 +74,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaScript);
+        populator.addScript(dataScript);
         return populator;
     }
 
@@ -98,6 +86,11 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         dataSource.setUsername(datasourceUsername);
         dataSource.setPassword(datasourcePassword);
         return dataSource;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
