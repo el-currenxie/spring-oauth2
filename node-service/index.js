@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const request = require('request');
+const axios = require('axios');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,34 +24,41 @@ async function prepareToken() {
     const result = await oauth2.clientCredentials.getToken();
     return await oauth2.accessToken.create(result);
   } catch(error) {
-    console.log('Access Token error', error.message);
+    throw error;
   }
 }
 
 async function createApp(){
 
-  accessToken = await prepareToken();
-
   app.get('/', (req, res) => res.json({'yay': 'Hello World!'}));
-  app.get('/info', (req, res) => {
-    if (accessToken) {
-      let url = "http://localhost:8080/api/accounts/account";
+  app.get('/info', async (req, res) => {
 
+    let errorJson, response, body, returnJson;
+
+    if (typeof accessToken === 'undefined' || accessToken.expired()) {
+      console.log("expired or undefined");
+      try {
+        accessToken = await prepareToken();
+      } catch (error) {
+        console.log('Error refreshing access token: ', error.message);
+        errorJson = {"msg": "fail to fetch"};
+        returnJson = errorJson;
+      }
+    }
+    if (typeof errorJson === 'undefined') {
+      let url = "http://localhost:8080/api/accounts/account";
       let options = {
         method: "GET",
         headers: {
           "content-type": "application/json",
           "authorization": "Bearer " + accessToken.token.access_token
         },
-        uri: url
+        url: url
       };
-
-      request(options,  (error, response, body) => {
-        res.json(JSON.parse(body));
-      });
-    } else {
-      res.json({err:"Not logged in"});
+      let axiosPromise = await axios(options);
+      returnJson = axiosPromise.data
     }
+    res.json(returnJson)
   });
 
   app.listen(port, () => console.log(`Listening on port ${port}`))

@@ -38,23 +38,14 @@ public class CoreServiceClientFeignConfig {
         return Logger.Level.FULL;
     }
 
-//    @Bean
-//    @ConfigurationProperties(prefix = "security.oauth2.client")
-//    public ClientCredentialsResourceDetails clientCredentialsResourceDetails() {
-//        return new ClientCredentialsResourceDetails();
-//    }
 
     private OAuth2ProtectedResourceDetails resource() {
         ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
-//        resourceDetails.setUsername("user");
-//        resourceDetails.setPassword("user");
         resourceDetails.setAccessTokenUri(accessTokenUri);
         resourceDetails.setClientId(clientId);
         resourceDetails.setClientSecret(clientSecret);
         resourceDetails.setGrantType("client_credentials");
         resourceDetails.setScope(Arrays.asList(scope));
-        System.out.println("----------------------------------");
-        System.out.println(resourceDetails);
         return resourceDetails;
     }
 

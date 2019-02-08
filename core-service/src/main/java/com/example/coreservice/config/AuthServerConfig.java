@@ -50,6 +50,16 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource());
+
+//        JdbcClientDetailsService clientDetailsService= new JdbcClientDetailsService(appConfig.dataSource());
+//        clientDetailsService.setDeleteClientDetailsSql(myDeleteClientDetailsSql);
+//        clientDetailsService.setFindClientDetailsSql(myFindClientDetailsSql);
+//        clientDetailsService.setInsertClientDetailsSql(myInsertClientDetailsSql);
+//        clientDetailsService.setInsertClientDetailsSql(myInsertClientDetailsSql);
+//        clientDetailsService.setSelectClientDetailsSql(mySelectClientDetailsSql);
+//        clientDetailsService.setUpdateClientDetailsSql(myUpdateClientDetailsSql);
+//        clientDetailsService.setUpdateClientSecretSql(myUpdateClientSecretSql);
+//        clients.withClientDetails(clientDetailsService);
     }
 
     @Override
@@ -72,7 +82,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(schemaScript);
+//        populator.addScript(schemaScript);
         populator.addScript(dataScript);
         return populator;
     }
