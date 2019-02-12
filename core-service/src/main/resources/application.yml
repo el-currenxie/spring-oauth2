@@ -2,11 +2,11 @@ debug: true
 
 logging.level:
 #  root: DEBUG
-  org.springframework.web.filter: DEBUG
-  org.springframework.security.web.access: DEBUG
-  org.springframework.web.client: DEBUG
-  example.client.HelloClient: DEBUG
-  org.apache.http: DEBUG
+#  org.springframework.web.filter: INFO
+#  org.springframework.security.web.access: DEBUG
+#  org.springframework.web.client: DEBUG
+#  org.apache.http: DEBUG
+  org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 
 spring:
   jpa:
