@@ -8,7 +8,13 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-const asyncMiddleware = fn => (req, res, next) => Promise.resolve(fn(req, res, next = console.error)).catch(next);
+const asyncMiddleware = fn => (req, res, next) =>
+  Promise
+    .resolve(fn(req, res, next = console.error))
+    .catch((error) => {
+      console.error(error);
+      res.json({"error":"error"})
+    });
 
 app.get('/', customOauthMiddleware, (req, res) => res.json({'yay': 'Hello World!'}));
 app.get('/info', customOauthMiddleware, asyncMiddleware(async (req, res) => {

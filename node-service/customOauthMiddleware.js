@@ -11,11 +11,10 @@ module.exports = async (req, res, next) => {
     }
   };
   const oauth2 = require('simple-oauth2').create(credentials);
-  if (accessTokenObj !== null) {
+  if (accessTokenObj !== null && accessTokenObj.expired()) {
     console.log(accessTokenObj.token.access_token, accessTokenObj.expired());
   }
   if (accessTokenObj === null || accessTokenObj.expired()) {
-    console.log("expired or undefined");
     try {
       const result = await oauth2.clientCredentials.getToken();
       accessTokenObj = await oauth2.accessToken.create(result);
