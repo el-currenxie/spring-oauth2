@@ -20,14 +20,12 @@ module.exports = async (req, res, next) => {
       const result = await oauth2.clientCredentials.getToken();
       accessTokenObj = await oauth2.accessToken.create(result);
       req.accessToken = accessTokenObj.token.access_token;
-      console.log(result)
       next()
     } catch (error) {
       console.log('Error refreshing access token: ', error.message);
     }
   } else {
     req.accessToken = accessTokenObj.token.access_token;
-    console.log(req.accessToken)
     next()
   }
 };
